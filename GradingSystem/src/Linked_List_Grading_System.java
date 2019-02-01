@@ -21,3 +21,47 @@ public class Linked_List_Grading_System
 		
 	} //Main
 } //Linked_List_Grading_System
+
+//Create a class for student. 
+class Student1 implements Comparable<Student1>
+{
+	//Private data fields for student. 
+	private String firstName;
+	private String lastName;
+	private int grade;
+	
+	//Create constructor for student. 
+	Student1(String firstName, String lastName, int grade)
+	{
+		//Set passed in values as values of private data fields. 
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.grade = grade;
+	}//Constructor
+	
+	//Getter for student grade. 
+	public int getGrade()
+	{
+		return grade;
+	}//getGrade()
+	
+	//Create compareTo method to compare student grades. 
+	@Override 
+	public int compareTo(Student1 other)
+	{
+		//If student grades are equal, then return 0. 
+		if(this.getGrade() == other.getGrade())
+		{
+			return 0;
+		}
+		if(this.getGrade() > other.getGrade())
+		{
+			return -1;
+		}
+		else
+		{
+			return 1;
+		}
+	}//compareTo
+}//Student1
+
