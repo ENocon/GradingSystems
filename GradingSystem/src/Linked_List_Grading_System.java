@@ -63,5 +63,82 @@ class Student1 implements Comparable<Student1>
 			return 1;
 		}
 	}//compareTo
+	
+	public String Print()
+	{
+		String gradeResults = String.format("%d\t%-12s\t%-12s\n", grade, firstName,lastName);
+		return gradeResults;
+	}
 }//Student1
 
+//Class to create Linked List. 
+class classLinkedList
+{
+	//Private Data Field. 
+	private Node head;
+	
+	classLinkedList()
+	{
+		head = null;
+	}
+	
+	//Build Linked List in order of student grades
+	//Built from highest grade to lowest grade
+	public void buildLinkedList(Student1 newStudent)
+	{
+		//Create variables to help keep track of nodes. 
+		Node newNode = new Node(newStudent);
+		Node current = head;
+		Node previous = null;
+		
+		//Create boolean value for if node has been placed or not
+		boolean placed = false;
+		
+		//While the node's proper place has not been found, continue to loop
+		while(current != null && !placed)
+		{
+			//Search for the node's proper place
+			//If returned value is -1, then the newNode needs to be placed before
+			//the current Node
+			if(current.data.compareTo(newNode.data) == -1)
+			{
+				placed = true;
+			}
+			//if location has not been found, then continue to traverse the linked list
+			else
+			{
+				previous = current;
+				current = current.nextNode;
+			}
+		} //While Loop
+		
+		//If the head does not have a value, then insert the node as the head. 
+		if(previous == null)
+		{
+			head = newNode;
+		}
+		
+		//If previous is not null, then the newNode needs to be placed between
+		//existing Nodes. 
+		if (previous != null)
+		{
+			previous.nextNode = newNode;
+			newNode.nextNode = current;
+		}
+	} //buildLinkedList
+	
+	//Create node class. 
+	private static class Node
+	{
+		//Private data fields. 
+		Student1 data;
+		Node nextNode;
+		
+		//Constructor for Node. 
+		Node(Student1 passedInStudent)
+		{
+			this.data = passedInStudent;
+			this.nextNode = null;
+		}
+	}//Node Class
+} //classLinkedList
