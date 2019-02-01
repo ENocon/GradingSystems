@@ -127,6 +127,23 @@ class classLinkedList
 		}
 	} //buildLinkedList
 	
+	//Print Linked List. 
+	public void PrintLinkedList()
+	{
+		System.out.println("-------------------------------------");
+		System.out.println("Student Grade Results in Order from Highest to Lowest");
+		System.out.println("Grade\tStudentName");
+		
+		Node this_Node = head;
+		
+		//While you are not at the end of the linked list, continue to print each student. 
+		while( this_Node != null)
+		{
+			System.out.print(this_Node.data.Print());
+			this_Node = this_Node.nextNode;
+		}
+	}//Print Linked List Method
+	
 	//Create node class. 
 	private static class Node
 	{
