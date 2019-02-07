@@ -8,16 +8,62 @@
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 import java.lang.Comparable;
 
 public class Linked_List_Grading_System 
 {
 	public static void main (String [] args) throws Exception
 	{
+		//Create scanner to read user input. 
+		Scanner userInput = new Scanner(System.in);
+		System.out.println("Please enter the name of your class.");
+		String className = userInput.next();
+		
+		//Ask for class size. 
+		System.out.println("Please enter the size of your class:");
+		int classSize = userInput.nextInt();
+		
+		//Create Linked List for class. 
+		classLinkedList classGrades = new classLinkedList();
+		
+		//Create variables for student name and grade. 
+		String firstName = null, lastName = null;
+		int grade;
+		
+		//Create while loop to repeatedly ask for user input. 
+		for(int i = 0; i < classSize; i++)
+		{	
+			System.out.println("Please enter student's first and last name.");
+			firstName = userInput.next();
+			lastName = userInput.next();
+			String name = firstName +" "+ lastName;
+			
+			System.out.println("Please enter "+ name +"'s grade.");
+			grade = userInput.nextInt();
+			
+			//Only accept grades that are 0 or greater. 
+			if (grade < 0)
+			{
+				System.out.println("Please enter a valid grade for the student that is greater than 0.");
+				System.out.println("Please enter student " + name + " grade again.\n");
+				grade = userInput.nextInt();
+			}
+			
+			//Create student, then add to linked list. 
+			Student1 newStudent = new Student1(name, grade);
+			classGrades.buildLinkedList(newStudent);
+		}//while loop
+		
+		//Close scanner.
+		userInput.close();
+		
+		//Print student grades in order.
+		System.out.println("Student Grade Results in Order from Highest to Lowest");
+		System.out.println(className);
+		classGrades.PrintLinkedList();
+		
 		
 	} //Main
 } //Linked_List_Grading_System
@@ -26,16 +72,14 @@ public class Linked_List_Grading_System
 class Student1 implements Comparable<Student1>
 {
 	//Private data fields for student. 
-	private String firstName;
-	private String lastName;
+	private String name;
 	private int grade;
 	
 	//Create constructor for student. 
-	Student1(String firstName, String lastName, int grade)
+	Student1(String name, int grade)
 	{
 		//Set passed in values as values of private data fields. 
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.name = name;
 		this.grade = grade;
 	}//Constructor
 	
@@ -54,19 +98,21 @@ class Student1 implements Comparable<Student1>
 		{
 			return 0;
 		}
+		//If this grade is greater than other, then the current node
+		//needs to go in front. 
 		if(this.getGrade() > other.getGrade())
 		{
-			return -1;
+			return 1;
 		}
 		else
 		{
-			return 1;
+			return -1;
 		}
 	}//compareTo
 	
 	public String Print()
 	{
-		String gradeResults = String.format("%d\t%-12s\t%-12s\n", grade, firstName,lastName);
+		String gradeResults = String.format("%d\t%s\n", grade, name);
 		return gradeResults;
 	}
 }//Student1
@@ -98,8 +144,9 @@ class classLinkedList
 		while(current != null && !placed)
 		{
 			//Search for the node's proper place
-			//If returned value is -1, then the newNode needs to be placed before
-			//the current Node
+			//If a -1 is returned, then the node needs to go between 
+			//two existing nodes. So, you need to return true to exit the loop. 
+			//To go to if previous != null. 
 			if(current.data.compareTo(newNode.data) == -1)
 			{
 				placed = true;
@@ -113,7 +160,7 @@ class classLinkedList
 		} //While Loop
 		
 		//If the head does not have a value, then insert the node as the head. 
-		if(previous == null)
+		if(head == null)
 		{
 			head = newNode;
 		}
@@ -128,11 +175,17 @@ class classLinkedList
 	} //buildLinkedList
 	
 	//Print Linked List. 
-	public void PrintLinkedList()
+	public void PrintLinkedList() throws IOException
 	{
 		System.out.println("-------------------------------------");
-		System.out.println("Student Grade Results in Order from Highest to Lowest");
-		System.out.println("Grade\tStudentName");
+		System.out.println("Grade\tStudent Name");
+		System.out.println("-------------------------------------");
+		
+		//Create text file. 
+		//Print grades to external text document.
+		File fileGrades = new File("classResults1.txt");
+		fileGrades.createNewFile();
+		PrintWriter output = new PrintWriter("classResults1.txt");
 		
 		Node this_Node = head;
 		
@@ -140,8 +193,10 @@ class classLinkedList
 		while( this_Node != null)
 		{
 			System.out.print(this_Node.data.Print());
+			output.print(this_Node.data.Print());
 			this_Node = this_Node.nextNode;
 		}
+		output.close();
 	}//Print Linked List Method
 	
 	//Create node class. 
